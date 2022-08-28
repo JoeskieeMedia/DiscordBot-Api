@@ -16,8 +16,8 @@ const reqNumber = {
 
 const ExpSchema = new Schema(
 	{
-		_id: reqString,
 		guildId: reqString,
+		id: reqString,
 		level: reqNumber,
 		xp: reqNumber,
         

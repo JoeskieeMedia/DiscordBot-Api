@@ -1,25 +1,21 @@
 const expModel = require( '../db/models/index' ).exp;
 const exp = {
 	byId: async function( req, res ) {
-		const find = req.body._id;
-		console.log( find );
+		const find = req.body.id;
 		const doc = await expModel.findOne( {
-			_id: find, 
+			id: find, 
 		} );
 		res.send( doc );
         
 	},
 	create: async function( req, res ){
-		const model = new expModel(
-			{
-				_id: req.body._id,
-				guildId: req.body.guildId,
-				level: req.body.level,
-				xp: req.body.xp,
-			}
+		const model = new expModel( {
+			guildId: req.body.guildId,
+			id: req.body.id,
+			level: req.body.level,
+			xp: req.body.xp,
+		}
 		);
-		
-		
 		
 		model.save().then( function ( err ) {
 			if ( err ) res.send( err );
@@ -29,26 +25,26 @@ const exp = {
 	},
 	update: function( req, res ){
 		const update = {
-			_id: req.body._id,
 			guildId: req.body.guildId,
+			id: req.body.id,
 			level: req.body.level,
 			xp: req.body.xp,
 		};
         
 		const opts = {
-			returnNewDocument: true, 
+			new: true,
+			upsert: true,
 		};
+
 		const filter = {
-			_id: req.body._id, 
+			guildId: req.body.guildId,
+			id: req.body.id, 
+
 		};
 		
-		expModel.findOneAndReplace( 
-			filter, update, opts, function( err, element 
-			)
-			{
-				
+		expModel.findOneAndUpdate( 
+			filter, update, opts, function( err, element ){
 				res.send( err || element );
-			
 			} 
 		);
 	},
